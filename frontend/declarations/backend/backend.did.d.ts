@@ -1,0 +1,21 @@
+import type { Principal } from '@dfinity/principal';
+import type { ActorMethod } from '@dfinity/agent';
+import type { IDL } from '@dfinity/candid';
+
+export type Result = { 'ok' : null } |
+  { 'err' : string };
+export interface TaxPayer {
+  'tid' : string,
+  'address' : string,
+  'lastName' : string,
+  'firstName' : string,
+}
+export interface _SERVICE {
+  'createTaxPayer' : ActorMethod<[TaxPayer], Result>,
+  'deleteTaxPayer' : ActorMethod<[string], Result>,
+  'getAllTaxPayers' : ActorMethod<[], Array<TaxPayer>>,
+  'getTaxPayerByTID' : ActorMethod<[string], [] | [TaxPayer]>,
+  'updateTaxPayer' : ActorMethod<[TaxPayer], Result>,
+}
+export declare const idlFactory: IDL.InterfaceFactory;
+export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];
