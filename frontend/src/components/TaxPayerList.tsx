@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { TextField, Box, Typography } from '@mui/material';
+import { TextField, Box, Typography, IconButton } from '@mui/material';
 import DataTable, { TableColumn } from 'react-data-table-component';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type TaxPayer = {
   tid: string;
@@ -11,34 +13,49 @@ type TaxPayer = {
 
 type TaxPayerListProps = {
   taxpayers: TaxPayer[];
+  onEditTaxPayer: (taxpayer: TaxPayer) => void;
+  onDeleteTaxPayer: (tid: string) => void;
 };
 
-const columns: TableColumn<TaxPayer>[] = [
-  {
-    name: 'TID',
-    selector: row => row.tid,
-    sortable: true,
-  },
-  {
-    name: 'First Name',
-    selector: row => row.firstName,
-    sortable: true,
-  },
-  {
-    name: 'Last Name',
-    selector: row => row.lastName,
-    sortable: true,
-  },
-  {
-    name: 'Address',
-    selector: row => row.address,
-    sortable: true,
-    wrap: true,
-  },
-];
-
-const TaxPayerList: React.FC<TaxPayerListProps> = ({ taxpayers }) => {
+const TaxPayerList: React.FC<TaxPayerListProps> = ({ taxpayers, onEditTaxPayer, onDeleteTaxPayer }) => {
   const [filterText, setFilterText] = useState('');
+
+  const columns: TableColumn<TaxPayer>[] = [
+    {
+      name: 'TID',
+      selector: row => row.tid,
+      sortable: true,
+    },
+    {
+      name: 'First Name',
+      selector: row => row.firstName,
+      sortable: true,
+    },
+    {
+      name: 'Last Name',
+      selector: row => row.lastName,
+      sortable: true,
+    },
+    {
+      name: 'Address',
+      selector: row => row.address,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: 'Actions',
+      cell: (row) => (
+        <>
+          <IconButton onClick={() => onEditTaxPayer(row)} size="small">
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={() => onDeleteTaxPayer(row.tid)} size="small" color="error">
+            <DeleteIcon />
+          </IconButton>
+        </>
+      ),
+    },
+  ];
 
   const filteredItems = taxpayers.filter(
     item => item.tid.toLowerCase().includes(filterText.toLowerCase()) ||
